@@ -1,0 +1,87 @@
+.artist-section-container {
+  background-color: var(--artist-section-bg-color);
+}
+
+.artist-header:before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.4;
+  background-repeat: no-repeat;
+  background-size: auto;
+}
+
+.artist-albums h3 + .row {
+  margin-bottom: 50px;
+}
+
+/* Header */
+
+.artist-header {
+  color: var(--sidebar-text-color);
+}
+
+.artist-header h1 {
+  font-size: 96px;
+}
+
+.artist-header h5 {
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.artist-nav {
+  z-index: 5;
+}
+
+.artist-albums::before {
+  content: "";
+  height: 70px;
+  width: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.6026611328125) 0%,
+    rgba(18, 18, 18, 0.9724090319721639) 80%
+  );
+  filter: blur(10px);
+  position: absolute;
+  top: -60px;
+  left: 0;
+  z-index: 0;
+}
+
+.artist-followButton {
+  border: 2px solid var(--sidebar-text-color);
+  color: var(--sidebar-text-color);
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.artist-followButton:hover {
+  background-color: var(--sidebar-text-color);
+  transform: scale(1.05);
+}
+
+.artist-playButton {
+  color: var(--login-bg-color);
+  font-weight: 700;
+  background-color: var(--spotify-color);
+  transition: all 0.2s ease;
+}
+
+.artist-playButton:hover {
+  transform: scale(1.05);
+  color: white;
+}
+
+.artist-menuButton:hover {
+  transform: scale(1.1);
+}
+
+.artist-header-button-row {
+  color: var(--sidebar-text-color);
+}

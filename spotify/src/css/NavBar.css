@@ -1,0 +1,92 @@
+/*------------------------------------*\
+                #sidebar
+\*------------------------------------*/
+
+.sidebar {
+  background-color: var(--home-bg-color);
+  color: var(--sidebar-text-color);
+  font-weight: 700;
+  height: 90vh;
+}
+
+.sidebar .navbar-nav .navbar-toggler ion-icon[name="menu-outline"] {
+  color: var(--login-bg-color);
+  font-weight: 900;
+  font-size: 1.5rem;
+}
+
+.sidebar .sidebar-dropdown {
+  visibility: hidden;
+  background-color: var(--home-bg-color);
+  top: 10vh;
+  left: 0;
+  position: absolute;
+  /* transition: all 0.2s ease */
+}
+
+.sidebar .navbar-toggler {
+  transform: scale(1.5);
+}
+
+.sidebar .sidebar-dropdown-trigger:hover .sidebar-dropdown {
+  visibility: visible;
+  animation: slide-in-top 0.3s ease-in-out forwards;
+}
+
+@keyframes slide-in-top {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sidebar ul li span {
+  color: var(--sidebar-text-color);
+}
+
+.sidebar ul li span:hover {
+  cursor: pointer;
+  color: var(--login-bg-color);
+}
+
+.sidebar-devider {
+  color: var(--sidebar-text-color);
+  width: 100%;
+  size: 3;
+}
+
+.sidebar .sidebar-button {
+  border-radius: 10px;
+  border: 3px solid var(--login-bg-color);
+  color: var(--login-bg-color);
+  font-weight: 700;
+  transition: all 0.2s ease-in-out;
+}
+
+.sidebar .sidebar-button:hover {
+  background-color: var(--login-bg-color);
+  transform: scale(1.05);
+  color: var(--home-bg-color);
+}
+
+.sidebar-footer-disclaimer {
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.sidebar .sidebar-top-nav li.nav-item {
+  position: relative;
+}
+
+.sidebar .sidebar-top-nav li.nav-item:nth-child(n + 2):hover ::before {
+  content: "";
+  position: absolute;
+  /* width: 10px; */
+  left: -22px;
+  height: 100%;
+  border-left: 5px solid var(--spotify-color);
+}

@@ -1,0 +1,41 @@
+.player {
+  margin-left: -15px;
+  margin-right: -15px;
+  height: 10vh;
+  background-color: var(--footer-bg-color);
+}
+
+.player-controls {
+  color: var(--sidebar-text-color);
+}
+
+.player-controls ion-icon[name="play-circle-outline"] {
+  font-size: 2em;
+}
+
+.player-preview-text {
+  line-height: 1.2em;
+  text-overflow: ellipsis;
+  /*truncates the text over 80px overflow with three ...*/
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.player .player-progress-divider {
+  height: 2px;
+  background-color: #404040;
+}
+
+.player .player-song-progress span {
+  font-size: 0.7rem;
+  color: var(--footer-player-text-color);
+}
+
+.player .player-volume-bar {
+  height: 2px;
+  background-color: var(--footer-player-text-color);
+}
+
+.player-progress-divider {
+  width: 400px;
+}

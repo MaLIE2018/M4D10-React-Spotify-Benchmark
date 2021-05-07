@@ -1,0 +1,160 @@
+:root {
+  --home-bg-color: black;
+  --login-bg-color: #ffffff;
+  --sidebar-text-color: #a6a6a6;
+  --footer-bg-color: #282828;
+  --footer-player-text-color: #b3b3b3;
+  --artist-section-bg-color: #121212;
+  --artist-album-card-bg-color: #262626;
+  --spotify-color: #1db954;
+}
+
+.artist-album-card {
+  background-color: var(--artist-album-card-bg-color);
+  border-radius: 2px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.artist-album-card:hover {
+  background-color: rgb(92 91 91);
+}
+
+.artist-album-card:hover .artist-album-card-button {
+  visibility: visible;
+  animation: slide-in 0.4s ease forwards;
+}
+
+@keyframes slide-in {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in-bottom {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.artist-album-card-albumTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--login-bg-color);
+}
+
+.artist-album-card-subTitle {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--footer-player-text-color);
+}
+
+.artist-album-card-button {
+  visibility: hidden;
+  background-color: var(--spotify-color);
+  bottom: 27%;
+  right: 8%;
+  position: absolute;
+}
+
+section.artist-albums h3 {
+  color: var(--login-bg-color);
+  font-weight: 700;
+}
+
+/*------------------------------------*\
+  #media
+  queries
+  \*------------------------------------*/
+@media screen and (max-height: 900px) {
+  .player {
+    padding-top: 1vh;
+  }
+}
+
+@media (max-width: 962px) {
+  .sidebar .navbar-nav li span {
+    font-size: 0.8rem;
+  }
+  .sidebar .sidebar-button {
+    font-size: 0.8rem;
+  }
+  .player-progress-divider {
+    width: 300px;
+  }
+}
+
+@media (max-width: 576px) {
+  .sidebar {
+    height: 10vh;
+  }
+  .player {
+    height: 15vh;
+  }
+  .player-progress-divider {
+    width: 75vw;
+  }
+  .iframe-section {
+    height: 75vh;
+  }
+  .artist-header h1 {
+    font-size: 36px;
+  }
+  .artist-header h5 {
+    font-size: 0.7rem;
+  }
+  @keyframes slide-in-homepage {
+    0% {
+      transform: translateY(100%);
+    }
+    100% {
+      transform: translateY(73%);
+    }
+  }
+  .login {
+    margin-right: 2%;
+    margin-left: 2%;
+  }
+}
+
+@media screen and (min-width: 577px) {
+  @keyframes slide-in-homepage {
+    0% {
+      transform: translateY(100%);
+    }
+    100% {
+      transform: translateY(30%);
+    }
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  #h1 {
+    font-size: 20px;
+  }
+  #h2 {
+    font-size: 20px;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  #h1 {
+    font-size: 40px;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  #h1 {
+    font-size: 45px;
+  }
+}
