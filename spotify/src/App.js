@@ -17,27 +17,28 @@ function App(props) {
 
   useEffect(() => {
     setPath(props.location.pathname)
+    fetchData(props.location.pathname)
   },[props])
 
-  // const fetchData = async () => {
-  //   try {
-  //     let response = await fetch(
-  //       "https://deezerdevs-deezer.p.rapidapi.com/track/"+ currPath.split("/")[3] , {
-  //           method: 'GET',
-  //           headers: {
-  //               'x-rapidapi-key': 'e88938dcfcmsh276f73df3fb1e5ep1a09e1jsn71c6fe23b716',
-  //               'x-rapidapi-host': 'deezerdevs-deezer.p.rapidapi.com',
-  //           },
-  //       }
-  //   );
-  //     if (response.ok) {
-  //       let data = await response.json();
-  //       setTrack([data]);
-  //     }
-  //   } catch (error) {
-  //    console.log(error)
-  //   }
-  // };
+  const fetchData = async () => {
+    try {
+      let response = await fetch(
+        "https://deezerdevs-deezer.p.rapidapi.com/track/"+ currPath.split("/")[3] , {
+            method: 'GET',
+            headers: {
+                'x-rapidapi-key': 'e88938dcfcmsh276f73df3fb1e5ep1a09e1jsn71c6fe23b716',
+                'x-rapidapi-host': 'deezerdevs-deezer.p.rapidapi.com',
+            },
+        }
+    );
+      if (response.ok) {
+        let data = await response.json();
+        setTrack([data]);
+      }
+    } catch (error) {
+     console.log(error)
+    }
+  };
 
 
   return (
@@ -48,7 +49,7 @@ function App(props) {
       <Route path={["/album/:albumId"]} component={Album}/>
       <Route path={["/artist/:artistId"]}  component={Artist}/>
       <Route path="/search"component={Search}/>
-      <MediaPlayer></MediaPlayer>
+      <MediaPlayer data={currTrack}></MediaPlayer>
       </Row>
     </Container>
   );
