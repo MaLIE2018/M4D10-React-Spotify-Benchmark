@@ -17,22 +17,24 @@ class MediaPlayer extends Component {
     const track = this.props.data[0];
     return (
       <footer className='player fixed-bottom'>
-        <div className='row d-flex align-items-center mr-0'>
+        <div className='row align-items-center'>
           {/*Start Preview */}
-          <div className='col d-flex flex-row align-items-center ml-3 flex-shrink-0'>
-            <img
-              className='img-fluid pl-3'
-              src={track?.artist?.picture ?? playerPreview}
-              alt='playerPreview'
-              style={{ maxWidth: "6vh" }}
-            />
-            <div className='player-preview-text d-inline-block d-sm-flex flex-column mx-2'>
-              <span className='text-white'>
-                {track?.title_short ?? "Song For My Father"}
-              </span>
-              <span className='text-muted'>
-                {track?.artist?.name ?? "Horace Silverman"}
-              </span>
+          <div className='col'>
+            <div className='d-flex flex-row align-items-center ml-2'>
+              <img
+                className='img-fluid ml-3'
+                src={track?.artist?.picture ?? playerPreview}
+                alt='playerPreview'
+                style={{ maxWidth: "6vh" }}
+              />
+              <div className='player-preview-text d-inline-block d-sm-flex flex-column mx-2'>
+                <span className='text-white'>
+                  {track?.title_short ?? "Song For My Father"}
+                </span>
+                <span className='text-muted'>
+                  {track?.artist?.name ?? "Horace Silverman"}
+                </span>
+              </div>
             </div>
             <div className='ml-3'>
               <ion-icon

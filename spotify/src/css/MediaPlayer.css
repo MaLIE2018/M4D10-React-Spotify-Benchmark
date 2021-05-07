@@ -1,7 +1,7 @@
 .player {
-  margin-left: -15px;
-  margin-right: -15px;
-  height: 10vh;
+  /* margin-left: -15px;
+  margin-right: -15px; */
+  max-height: 10vh;
   background-color: var(--footer-bg-color);
 }
 

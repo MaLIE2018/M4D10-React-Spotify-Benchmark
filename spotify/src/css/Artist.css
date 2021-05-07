@@ -2,6 +2,11 @@
   background-color: var(--artist-section-bg-color);
 }
 
+.artist-section-container {
+  min-height: 95vh;
+  overflow-y: auto;
+}
+
 .artist-header:before {
   content: "";
   display: block;

@@ -16,12 +16,13 @@ function App(props) {
   const [currTrack,setTrack] = useState({})
 
   useEffect(() => {
-    setPath(props.location.pathname)
-    fetchData(props.location.pathname)
+    setPath(() => {
+      return props.location.pathname},fetchData(props.location.pathname))
   },[props])
 
-  const fetchData = async () => {
-    try {
+  const fetchData = async (currPath) => {
+    console.log("crr",currPath.split("/")[3])
+    if(currPath.split("/")[3] ){try {
       let response = await fetch(
         "https://deezerdevs-deezer.p.rapidapi.com/track/"+ currPath.split("/")[3] , {
             method: 'GET',
@@ -37,7 +38,7 @@ function App(props) {
       }
     } catch (error) {
      console.log(error)
-    }
+    }}
   };
 
 
