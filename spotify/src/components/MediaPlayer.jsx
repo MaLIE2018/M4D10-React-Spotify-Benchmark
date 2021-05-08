@@ -25,6 +25,11 @@ class MediaPlayer extends Component {
     const trackoffset = document.querySelector(".track-container").offsetLeft;
     const volumeIcon = 29;
 
+    //initial 50 % volume
+    slider.style.width = "100px";
+    sliderThumb.style.left = "129px";
+    VolumeIconAnimation(50);
+
     track.addEventListener("mousedown", function (e) {
       e = e || window.event;
       e.preventDefault();
