@@ -36,6 +36,55 @@
   background-color: var(--footer-player-text-color);
 }
 
-.player-progress-divider {
-  width: 400px;
+.track {
+  width: 200px;
+  height: 10px;
+  background-color: #9f9f9f;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.track-container {
+  height: 20px;
+  padding: 10px 10px;
+  margin: 5px;
+}
+
+.track-container .slider {
+  height: 10px;
+  width: 0px;
+  background-color: #f5f5f5;
+  left: 0;
+  z-index: 1;
+}
+
+.track-container:hover .slider-thumb {
+  visibility: visible;
+}
+
+.track-container:hover .slider {
+  background-color: #1db954;
+}
+
+.slider-thumb {
+  position: absolute;
+  visibility: hidden;
+  /* slider  left */
+  left: 29px;
+  transform: translateY(-50%);
+  top: 10px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  /* background-color: #FFFFFF; */
+  background-color: white;
+  z-index: 5;
+}
+
+.container {
+  height: 10vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #181818;
 }

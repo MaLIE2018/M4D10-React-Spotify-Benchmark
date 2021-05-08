@@ -8,11 +8,112 @@ import {
   ReorderFourOutline,
   LaptopOutline,
   VolumeMediumOutline,
+  VolumeMuteOutline,
+  VolumeLowOutline,
+  VolumeHighOutline,
+  VolumeOffOutline,
 } from "react-ionicons";
 import playerPreview from "../assets/img/player-preview.jpg";
 import "../css/MediaPlayer.css";
 
 class MediaPlayer extends Component {
+  componentDidMount() {
+    const slider = document.querySelector(".slider");
+    const sliderThumb = document.querySelector(".slider-thumb");
+    const track = document.querySelector(".track");
+    const trackwidth = track.offsetWidth;
+    const trackoffset = document.querySelector(".track-container").offsetLeft;
+    const volumeIcon = 29;
+
+    track.addEventListener("mousedown", function (e) {
+      e = e || window.event;
+      e.preventDefault();
+      slider.style.width = e.offsetX + "px";
+      sliderThumb.style.left = e.offsetX + "px";
+      document.onmouseup = closeDragElement;
+      track.onmousemove = calculateCurrentSliderProgress;
+    });
+
+    function VolumeIconAnimation(value) {
+      // Show Icons according to value
+      switch (true) {
+        case value === 0:
+          document.querySelector(".volume-mute").classList.remove("d-none");
+          document.querySelector(".volume-low").classList.add("d-none");
+          document.querySelector(".volume-medium").classList.add("d-none");
+          document.querySelector(".volume-high").classList.add("d-none");
+          break;
+        case value > 0 && value <= 25:
+          document.querySelector(".volume-mute").classList.add("d-none");
+          document.querySelector(".volume-low").classList.remove("d-none");
+          document.querySelector(".volume-medium").classList.add("d-none");
+          document.querySelector(".volume-high").classList.add("d-none");
+
+          break;
+        case value > 25 && value <= 75:
+          document.querySelector(".volume-mute").classList.add("d-none");
+          document.querySelector(".volume-low").classList.add("d-none");
+          document.querySelector(".volume-medium").classList.remove("d-none");
+          document.querySelector(".volume-high").classList.add("d-none");
+
+          break;
+        case value > 75 && value <= 100:
+          document.querySelector(".volume-mute").classList.add("d-none");
+          document.querySelector(".volume-low").classList.add("d-none");
+          document.querySelector(".volume-medium").classList.add("d-none");
+          document.querySelector(".volume-high").classList.remove("d-none");
+          break;
+        default:
+          //document.querySelector("ion-icon[name='volume-off-outline']").classList.toggle("d-none")
+          break;
+      }
+    }
+
+    function calculateCurrentSliderProgress(e) {
+      e = e || window.event;
+      e.preventDefault();
+      let value = 0;
+
+      slider.style.width = e.offsetX + "px";
+      sliderThumb.style.left = e.offsetX + volumeIcon + "px";
+
+      //calculate the value of the slider
+      if (
+        slider.style.width.slice(0, slider.style.width.length - 2) >= trackwidth
+      ) {
+        value = 100;
+        sliderThumb.style.left = trackwidth + trackoffset - volumeIcon + "px";
+      } else if (
+        slider.style.width.slice(0, slider.style.width.length - 2) <= 0
+      ) {
+        value = 0;
+        sliderThumb.style.left = volumeIcon + "px";
+      } else {
+        value = parseInt(
+          (slider.style.width.slice(0, slider.style.width.length - 2) /
+            trackwidth) *
+            100
+        );
+      }
+      VolumeIconAnimation(value);
+    }
+
+    function closeDragElement() {
+      // stop moving when mouse button is released:
+      track.onmouseup = null;
+      document.onmousemove = null;
+    }
+
+    function mute() {
+      sliderThumb.style.left = volumeIcon + "px";
+      slider.style.width = 0 + "px";
+      VolumeIconAnimation(0);
+    }
+    [...document.querySelectorAll(".volumeIcon")].map((icon) =>
+      icon.addEventListener("click", () => mute())
+    );
+  }
+
   render() {
     const track = this.props.data[0];
     return (
@@ -111,18 +212,47 @@ class MediaPlayer extends Component {
               height='30px'
               width='30px'
             />
-            <VolumeMediumOutline
-              color={"#ffffff"}
-              title={"volume"}
-              height='30px'
-              width='30px'
-            />
-            <hr
-              className='player-volume-bar m-0 ml-2 mr-4'
-              style={{ width: "20%" }}
-              size={3}
-              color='var(--footer-player-text-color)'
-            />
+            <div className='track-container position-relative d-flex align-items-center'>
+              <VolumeMuteOutline
+                color={"#ffffff"}
+                title={"play"}
+                height='250px'
+                width='25px'
+                className='volumeIcon volume-mute mr-2'
+              />
+              <VolumeLowOutline
+                color={"#ffffff"}
+                title={"play"}
+                height='25px'
+                width='25px'
+                className='volumeIcon volume-low d-none mr-2'
+              />
+              <VolumeMediumOutline
+                color={"#ffffff"}
+                title={"play"}
+                height='25px'
+                width='25px'
+                className='volumeIcon volume-medium d-none mr-2'
+              />
+              <VolumeHighOutline
+                color={"#ffffff"}
+                title={"play"}
+                height='25px'
+                width='25px'
+                className='volumeIcon volume-high d-none mr-2'
+              />
+              <VolumeOffOutline
+                color={"#ffffff"}
+                title={"play"}
+                height='25px'
+                width='25px'
+                className='volumeIcon volume-off d-none mr-2'
+              />
+              <div className='slider-thumb' />
+              <div className='track position-relative'>
+                <div className='slider position-absolute'></div>
+              </div>
+            </div>
           </div>
           {/* End Volume */}
         </div>
