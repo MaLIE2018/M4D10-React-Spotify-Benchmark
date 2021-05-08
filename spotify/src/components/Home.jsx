@@ -1,19 +1,24 @@
 import React, { Component } from "react";
 import "../css/HomePage.css";
-
 import * as HelperModule from "../modules/helper.js";
 import * as FetchModule from "../modules/retrievedata.js";
-import { Link } from "react-router-dom";
-
+import AlbumCard from "../components/AlbumCard";
 class Home extends Component {
+  state = {
+    data: [],
+  };
+
   componentDidMount = async () => {
     let url =
       "https://deezerdevs-deezer.p.rapidapi.com/artist/412/top?limit=50";
     const data = await FetchModule.retrieveData(url);
-    HelperModule.createAlbums(
-      HelperModule.uniqueAlbums(data.data),
-      document.querySelector(".album-row")
-    );
+    this.setState((state) => {
+      return { data: HelperModule.uniqueAlbums(data.data) };
+    });
+    // HelperModule.createAlbums(
+    //   HelperModule.uniqueAlbums(data.data),
+    //   document.querySelector(".album-row")
+    // );
   };
   render() {
     return (
@@ -58,7 +63,11 @@ class Home extends Component {
             <h1 id='h1' className='pt-3'>
               #THROWBACKTHURSDAY
             </h1>
-            <div className='album-row row d-flex justify-content-between'></div>
+            <div className='album-row row d-flex justify-content-between'>
+              {this.state.data.map((album) => {
+                return <AlbumCard album={album} key={album.id} />;
+              })}
+            </div>
           </section>
           {/* Start Second Albumrow */}
         </div>

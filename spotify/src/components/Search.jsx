@@ -2,11 +2,13 @@ import React, { Component } from "react";
 import * as HelperModule from "../modules/helper.js";
 import * as FetchModule from "../modules/retrievedata.js";
 import Tracklist from "./Tracklist";
+import AlbumCard from "../components/AlbumCard";
 
 class Search extends Component {
   state = {
     data: {},
     searchText: "",
+    uniqueAlbums: [],
   };
 
   async componentDidUpdate(prevProps, prevState) {
@@ -18,13 +20,11 @@ class Search extends Component {
       let searchUrl = `https://deezerdevs-deezer.p.rapidapi.com/search?q=${this.state.searchText}`;
       const responseData = await FetchModule.retrieveData(searchUrl);
       this.setState((state) => {
-        console.log(responseData);
-        return { data: responseData };
+        return {
+          uniqueAlbums: HelperModule.uniqueAlbums(responseData.data),
+          data: responseData,
+        };
       });
-      HelperModule.createAlbums(
-        HelperModule.uniqueAlbums(responseData.data),
-        document.querySelector(".album-row")
-      );
     }
   }
 
@@ -32,12 +32,15 @@ class Search extends Component {
     let searchUrl = `https://deezerdevs-deezer.p.rapidapi.com/search?q=${"Metallica"}`;
     const responseData = await FetchModule.retrieveData(searchUrl);
     this.setState((state) => {
-      return { data: responseData };
+      return {
+        data: responseData,
+        uniqueAlbums: HelperModule.uniqueAlbums(responseData.data),
+      };
     });
-    HelperModule.createAlbums(
-      HelperModule.uniqueAlbums(responseData.data),
-      document.querySelector(".album-row")
-    );
+    // HelperModule.createAlbums(
+    //   HelperModule.uniqueAlbums(responseData.data),
+    //   document.querySelector(".album-row")
+    // );
   }
 
   handleSearch = (e) => {
@@ -93,7 +96,11 @@ class Search extends Component {
             <h1 id='h1' className='pt-3'>
               Albums
             </h1>
-            <div className='album-row row d-flex justify-content-between'></div>
+            <div className='album-row row d-flex justify-content-between'>
+              {this.state.uniqueAlbums?.map((album) => {
+                return <AlbumCard album={album} key={album.id} />;
+              })}
+            </div>
           </section>
           {/* Start Second Albumrow */}
         </div>

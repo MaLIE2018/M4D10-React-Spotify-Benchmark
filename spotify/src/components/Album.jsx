@@ -4,7 +4,8 @@ import { Heart } from "react-ionicons";
 import * as FetchModule from "../modules/retrievedata.js";
 import "../css/Album.css";
 import Tracklist from "./Tracklist";
-
+import { Link } from "react-router-dom";
+import { Nav } from "react-bootstrap";
 class Album extends Component {
   state = {
     data: {},
@@ -30,8 +31,6 @@ class Album extends Component {
       "-"
     )[0];
     document.querySelector(".album-img").src = album.cover;
-    document.querySelector(".albumsongs-section-artistlink").id =
-      tracks[0].artist.id;
   };
 
   render() {
@@ -41,9 +40,12 @@ class Album extends Component {
           <div className='col-12 col-sm-4 d-flex flex-column align-items-center mt-5'>
             <img className='album-img' src alt='albumcover' />
             <h1 className='album-title text-center mt-2'>tt</h1>
-            <a href className='albumsongs-section-artistlink'>
+            <Nav.Link
+              as={Link}
+              className='album-songrow-artistpagelink'
+              to={`/artist/${this.data?.tracks?.data[0]?.artist.id}`}>
               <h6 className='artist'>fff</h6>
-            </a>
+            </Nav.Link>
             <button className='button artist-playButton btn rounded-pill my-3 mt-3 w-50'>
               PLAY
             </button>

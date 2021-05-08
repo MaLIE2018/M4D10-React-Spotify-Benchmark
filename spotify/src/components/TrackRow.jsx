@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { MusicalNote, PlayOutline, PauseOutline } from "react-ionicons";
 import * as HelperModule from "../modules/helper.js";
 import { withRouter } from "react-router-dom";
-
+import { Link } from "react-router-dom";
+import { Nav } from "react-bootstrap";
 class TrackRow extends Component {
   handleClick = (e) => {
     this.props.onCLickHandler(this.props.track.id);
@@ -42,11 +43,12 @@ class TrackRow extends Component {
         </div>
         <div className='col-9 text-white d-flex flex-column'>
           <span className='album-songname'>{this.props.track.title}</span>
-          <a
-            href={`/artist/${this.props.track.artist.id}`}
-            className='album-songrow-artistpagelink'>
+          <Nav.Link
+            as={Link}
+            className='album-songrow-artistpagelink'
+            to={`/artist/${this.props.track.artist.id}`}>
             <span className='album-artist'>{this.props.track.artist.name}</span>
-          </a>
+          </Nav.Link>
         </div>
         <div className='col-1'>
           <span className='album-songname'>

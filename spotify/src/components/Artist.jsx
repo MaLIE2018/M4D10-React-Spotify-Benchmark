@@ -3,8 +3,12 @@ import PropTypes from "prop-types";
 import { EllipsisHorizontalOutline } from "react-ionicons";
 import * as HelperModule from "../modules/helper.js";
 import * as FetchModule from "../modules/retrievedata.js";
+import AlbumCard from "../components/AlbumCard";
 import "../css/Artist.css";
 class Artist extends Component {
+  state = {
+    data: [],
+  };
   async componentDidMount() {
     const artistId = this.props.match.params.artistId;
     let url = `https://deezerdevs-deezer.p.rapidapi.com/artist/${artistId}/top?limit=50`;
@@ -13,10 +17,9 @@ class Artist extends Component {
       `https://deezerdevs-deezer.p.rapidapi.com/artist/${artistId}`
     );
     this.fillArtistDetails(artistdata);
-    HelperModule.createAlbums(
-      HelperModule.uniqueAlbums(data.data),
-      document.querySelector(".artist-albums .row")
-    );
+    this.setState((state) => {
+      return { data: HelperModule.uniqueAlbums(data.data) };
+    });
   }
 
   fillArtistDetails = (artistdata) => {
@@ -76,7 +79,11 @@ class Artist extends Component {
           <section className='artist-albums p-3 mt-3 mb-3 position-relative'>
             {/* <div class="pt-5 position-absolute bg-secondary w-100" style="top:20px;height:30px"></div> */}
             <h3>Discography</h3>
-            <div className='row d-flex mt-4 pb-4 justify-content-between'></div>
+            <div className='row d-flex mt-4 pb-4 justify-content-between'>
+              {this.state.data?.map((album) => {
+                return <AlbumCard album={album} key={album.id} />;
+              })}
+            </div>
           </section>
         </div>
       </div>

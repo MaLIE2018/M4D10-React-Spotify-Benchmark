@@ -171,7 +171,7 @@ class NavBar extends Component {
                 width='30px'
               />
               <span className='ml-lg-3 ml-1 d-sm-none d-md-inline-block d-lg-inline-block'>
-                Your Libary
+                Your Library
               </span>
             </div>
           </li>
