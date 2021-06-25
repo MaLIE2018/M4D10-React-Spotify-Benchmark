@@ -9,6 +9,7 @@ const Styles = styled.div`
   h1 {
     color: var(--login-bg-color);
   }
+  min-height: 100vh;
 `;
 
 const Queue = (props) => {
