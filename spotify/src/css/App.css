@@ -1,5 +1,32 @@
 @import "../css/__colors.css";
 
+html {
+  overflow: scroll;
+  overflow-x: hidden;
+}
+::-webkit-scrollbar {
+  width: 0; /* Remove scrollbar space */
+  background: transparent; /* Optional: just make scrollbar invisible */
+}
+
+.center-content {
+  position: relative;
+  left: 50%;
+  top: 100%;
+  -webkit-transform: translate(-50%, 22.5%);
+  transform: translate(-50%, 22.5%);
+}
+
+.queue {
+  background: rgb(10, 16, 23);
+  background: radial-gradient(
+    circle,
+    rgba(10, 16, 23, 1) 0%,
+    rgba(25, 50, 77, 1) 91%
+  );
+  overflow-y: auto;
+}
+
 .artist-album-card {
   background-color: var(--artist-album-card-bg-color);
   border-radius: 2px;

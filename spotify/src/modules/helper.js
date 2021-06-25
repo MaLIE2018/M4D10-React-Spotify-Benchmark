@@ -1,6 +1,3 @@
-import * as HelperModule from '../modules/helper.js'
-
-
 let audio = ''
 
 //Get unique albums in a query search and artist fetch
@@ -26,9 +23,11 @@ export const getTracks = (data) => {
             preview: song.preview,
             title: song.title,
             duration: song.duration,
-            id:song.id
+            id:song.id,
+            trackListURL: song.album.tracklist
         })
     })
+    
     return tracks
 }
 

@@ -1,20 +1,21 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { EllipsisHorizontalOutline } from "react-ionicons";
 import * as HelperModule from "../modules/helper.js";
 import * as FetchModule from "../modules/retrievedata.js";
 import AlbumCard from "../components/AlbumCard";
 import "../css/Artist.css";
+import { api } from "../App";
+
 class Artist extends Component {
   state = {
     data: [],
   };
   async componentDidMount() {
     const artistId = this.props.match.params.artistId;
-    let url = `https://deezerdevs-deezer.p.rapidapi.com/artist/${artistId}/top?limit=50`;
+    let url = api + `/artist/${artistId}/top?limit=50`;
     const data = await FetchModule.retrieveData(url);
     const artistdata = await FetchModule.retrieveData(
-      `https://deezerdevs-deezer.p.rapidapi.com/artist/${artistId}`
+      api + `/artist/${artistId}`
     );
     this.fillArtistDetails(artistdata);
     this.setState((state) => {

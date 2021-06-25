@@ -3,6 +3,7 @@ import * as HelperModule from "../modules/helper.js";
 import * as FetchModule from "../modules/retrievedata.js";
 import Tracklist from "./Tracklist";
 import AlbumCard from "../components/AlbumCard";
+import { api } from "../App";
 
 class Search extends Component {
   state = {
@@ -16,8 +17,7 @@ class Search extends Component {
       prevState.searchText !== this.state.searchText &&
       this.state.searchText.length > 3
     ) {
-      console.log("cdu");
-      let searchUrl = `https://deezerdevs-deezer.p.rapidapi.com/search?q=${this.state.searchText}`;
+      let searchUrl = api + `/search?q=${this.state.searchText}`;
       const responseData = await FetchModule.retrieveData(searchUrl);
       this.setState((state) => {
         return {
@@ -29,7 +29,7 @@ class Search extends Component {
   }
 
   async componentDidMount() {
-    let searchUrl = `https://deezerdevs-deezer.p.rapidapi.com/search?q=${"Metallica"}`;
+    let searchUrl = api + `/search?q=${"Metallica"}`;
     const responseData = await FetchModule.retrieveData(searchUrl);
     this.setState((state) => {
       return {
@@ -37,10 +37,6 @@ class Search extends Component {
         uniqueAlbums: HelperModule.uniqueAlbums(responseData.data),
       };
     });
-    // HelperModule.createAlbums(
-    //   HelperModule.uniqueAlbums(responseData.data),
-    //   document.querySelector(".album-row")
-    // );
   }
 
   handleSearch = (e) => {
@@ -51,18 +47,18 @@ class Search extends Component {
 
   render() {
     return (
-      <div className='search-section p-0 col-12 col-sm-11 col-md-10'>
-        <div className='homepage col py-3 px-5'>
+      <div className="search-section p-0 col-12 col-sm-11 col-md-10">
+        <div className="homepage col py-3 px-5">
           {/* Navbar */}
-          <nav className='navbar navbar-expand-lg navbar-dark col-12'>
-            <div className='collapse navbar-collapse' id='navbarNavAltMarkup'>
-              <div className='navbar-nav d-flex'>
-                <form className='form-inline my-2 my-lg-0'>
+          <nav className="navbar navbar-expand-lg navbar-dark col-12">
+            <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+              <div className="navbar-nav d-flex">
+                <form className="form-inline my-2 my-lg-0">
                   <input
-                    className='searchField form-control mr-sm-2 rounded-pill w-100'
-                    type='search'
-                    placeholder='Artists, songs, or podcasts'
-                    aria-label='Search'
+                    className="searchField form-control mr-sm-2 rounded-pill w-100"
+                    type="search"
+                    placeholder="Artists, songs, or podcasts"
+                    aria-label="Search"
                     onChange={(e) => this.handleSearch(e)}
                     value={this.state.searchText}
                   />
@@ -73,13 +69,14 @@ class Search extends Component {
           {/* End Navbar */}
           {/* StartSongs */}
           <section>
-            <h1 id='h1' className='pt-3'>
+            <h1 id="h1" className="pt-3">
               Songs
             </h1>
-            <div className='row'>
+            <div className="row">
               <div
-                className='search-songlist col w-100 mt-5 overflow-auto'
-                style={{ maxHeight: "20vh" }}>
+                className="search-songlist col w-100 mt-5 overflow-auto"
+                style={{ maxHeight: "20vh" }}
+              >
                 {this.state.data?.data !== undefined && (
                   <>
                     <Tracklist
@@ -93,10 +90,10 @@ class Search extends Component {
           {/* Start first Songs */}
           {/* Start first Albumrow */}
           <section>
-            <h1 id='h1' className='pt-3'>
+            <h1 id="h1" className="pt-3">
               Albums
             </h1>
-            <div className='album-row row d-flex justify-content-between'>
+            <div className="album-row row d-flex justify-content-between">
               {this.state.uniqueAlbums?.map((album) => {
                 return <AlbumCard album={album} key={album.id} />;
               })}

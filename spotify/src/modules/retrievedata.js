@@ -10,7 +10,7 @@ export const retrieveData = (url) => {
                 }
             )
             .then((resp) => resp.json())
-            .then((data) => {
+            .then((data) => {                
                 resolve(data)
             })
             .catch((err) => console.log(err.message, err)) // could show an alert! that is smart

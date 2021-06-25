@@ -4,27 +4,39 @@ import {Container } from "react-bootstrap"
 import NavBar from "./components/NavBar.jsx"
 import {Row} from "react-bootstrap"
 import MediaPlayer from './components/MediaPlayer'
-import {Route, withRouter} from 'react-router-dom'
+import {Route, withRouter, Switch, BrowserRouter as Router, Redirect} from 'react-router-dom'
 import Home from './components/Home'
 import Album from "./components/Album"
 import Artist from "./components/Artist"
 import Search from "./components/Search"
+import Queue from "./components/Queue"
 import {useState, useEffect} from "react"
+import {store} from "./redux/store/index.js"
+import Favs from './components/Favs';
+import {useSelector} from "react-redux"
+export const api = "https://striveschool-api.herokuapp.com/api/deezer"
 
 function App(props) {
   const [currPath, setPath] = useState("")
   const [currTrack,setTrack] = useState({})
+  const {queue, favorites} = useSelector((state) => state)
+
+  
 
   useEffect(() => {
     setPath(() => {
       return props.location.pathname},fetchData(props.location.pathname))
   },[props])
 
+  useEffect(() => {
+      localStorage.setItem("queue", JSON.stringify(queue))
+      localStorage.setItem("favorites", JSON.stringify(favorites))
+  },[queue, favorites])
+
   const fetchData = async (currPath) => {
-    console.log("crr",currPath.split("/")[3])
     if(currPath.split("/")[3] ){try {
       let response = await fetch(
-        "https://deezerdevs-deezer.p.rapidapi.com/track/"+ currPath.split("/")[3] , {
+        api + "/track/"+ currPath.split("/")[3] , {
             method: 'GET',
             headers: {
                 'x-rapidapi-key': 'e88938dcfcmsh276f73df3fb1e5ep1a09e1jsn71c6fe23b716',
@@ -43,16 +55,23 @@ function App(props) {
 
 
   return (
-    <Container fluid>
-      <Row>
-      <NavBar></NavBar>
-      <Route path="/home" component={Home}/>
-      <Route path={["/album/:albumId"]} component={Album}/>
-      <Route path={["/artist/:artistId"]}  component={Artist}/>
-      <Route path="/search"component={Search}/>
-      <MediaPlayer data={currTrack}></MediaPlayer>
-      </Row>
-    </Container>
+    <Router>
+      <Container fluid>
+        <Row>
+          <NavBar />
+          <Switch>
+            <Route path="/home" component={Home}/>
+            <Route path={["/album/:albumId"]} component={Album}/>
+            <Route path={["/artist/:artistId"]}  component={Artist}/>
+            <Route path="/search"component={Search}/>
+            <Route path="/queue"component={Queue}/>
+            <Route path="/favorites"component={Favs}/>
+            <Redirect from="/" to="/home" />
+          </Switch>
+          <MediaPlayer/>
+        </Row>
+      </Container>
+    </Router>
   );
 }
 

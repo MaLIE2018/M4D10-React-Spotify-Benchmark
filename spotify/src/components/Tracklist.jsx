@@ -24,13 +24,12 @@ class Tracklist extends Component {
   render() {
     return this.props.tracks.map((track) => {
       return (
-        <>
-          <TrackRow
-            track={track}
-            key={track.id}
-            onCLickHandler={this.handleClick}
-          />
-        </>
+        <TrackRow
+          track={track}
+          key={track.id}
+          albumId={this.props.albumId}
+          onCLickHandler={this.handleClick}
+        />
       );
     });
   }
