@@ -22,9 +22,6 @@ export const addToQueue = (trackListURL) => {
   }
 
 }
-
-
-
 export const addToFavorites = (song) => {
   return {
     type: "ADD_TO_FAVORITES",
@@ -32,7 +29,6 @@ export const addToFavorites = (song) => {
   }
 
 }
-
 export const removeFromFavorites = (id) => {
   return {
     type: "REMOVE_FROM_FAVORITES",
@@ -40,32 +36,26 @@ export const removeFromFavorites = (id) => {
   }
 
 }
-
-
 export const setTrack = (track) => {
   return { 
     type: "SET_TRACK",
     payload: track
   }
 }
-
 export const playTrack = () => {
   return { 
     type: "PLAY_TRACK",
     
   }
 }
-
 export const pauseTrack = () => {
   return { 
     type: "PAUSE_TRACK",
-  
   }
 }
 
-export const stopTrack = () => {
+export const setVolume = () => {
   return { 
-    type: "STOP_TRACK",
-  
+    type: "SET_VOLUME",
   }
 }

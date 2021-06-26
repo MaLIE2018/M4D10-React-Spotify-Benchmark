@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect, createRef } from "react";
 import {
   ShuffleOutline,
   PlaySkipBackOutline,
@@ -7,182 +7,149 @@ import {
   RepeatOutline,
   ReorderFourOutline,
   LaptopOutline,
-  VolumeMediumOutline,
-  VolumeMuteOutline,
-  VolumeLowOutline,
-  VolumeHighOutline,
-  VolumeOffOutline,
-  PauseOutline,
+  PauseCircleOutline,
 } from "react-ionicons";
-import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import playerPreview from "../assets/img/player-preview.jpg";
-import "../css/MediaPlayer.css";
 import { ProgressBar } from "react-bootstrap";
+import VolumeBar from "./VolumeBar";
+import { useSelector, useDispatch } from "react-redux";
+import styled from "styled-components";
+import * as FetchModule from "../modules/retrievedata.js";
+import { api } from "../App";
 
-class MediaPlayer extends Component {
-  audio = new Audio();
+const Styles = styled.footer`
+  .player {
+    max-height: 10vh;
+    background-color: var(--footer-bg-color);
+  }
 
-  state = {
-    currentTrackProgress: 0,
+  .player-controls {
+    color: var(--sidebar-text-color);
+  }
+
+  .player-controls ion-icon[name="play-circle-outline"] {
+    font-size: 2em;
+  }
+
+  .player-preview-text {
+    line-height: 1.2em;
+    text-overflow: ellipsis;
+    /*truncates the text over 80px overflow with three ...*/
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .player .player-progress-divider {
+    height: 2px;
+    background-color: #404040;
+  }
+
+  .player .player-song-progress span {
+    font-size: 0.7rem;
+    color: var(--footer-player-text-color);
+  }
+
+  .player .player-volume-bar {
+    height: 2px;
+    background-color: var(--footer-player-text-color);
+  }
+
+  .container {
+    height: 10vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #181818;
+  }
+  .player-controls span {
+    cursor: pointer;
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+  .progress-bar {
+    background-color: var(--spotify-color);
+  }
+`;
+
+const MediaPlayer = (props) => {
+  const audio = createRef();
+  const dispatch = useDispatch();
+  const player = useSelector((state) => state.player);
+  const queue = useSelector((state) => state.queue);
+  const [currentTrackProgress, setProgress] = useState(0);
+  const { track, play, volume } = player;
+  const [artistImg, setArtistImg] = useState("");
+
+  const getArtist = async () => {
+    if (track?.artist?.id) {
+      const artistdata = await FetchModule.retrieveData(
+        api + `/artist/${track.artist.id}`
+      );
+      setArtistImg(artistdata.picture_small);
+    }
   };
 
-  componentDidMount() {
-    const slider = document.querySelector(".slider");
-    const sliderThumb = document.querySelector(".slider-thumb");
-    const track = document.querySelector(".track");
-    const trackwidth = track.offsetWidth;
-    const trackoffset = document.querySelector(".track-container").offsetLeft;
-    const volumeIcon = 29;
-
-    //initial 50 % volume
-    slider.style.width = "100px";
-    sliderThumb.style.left = "129px";
-    VolumeIconAnimation(50);
-
-    track.addEventListener("mousedown", function (e) {
-      e = e || window.event;
-      e.preventDefault();
-      slider.style.width = e.offsetX + "px";
-      sliderThumb.style.left = e.offsetX + "px";
-      document.onmouseup = closeDragElement;
-      track.onmousemove = calculateCurrentSliderProgress;
+  useEffect(() => {
+    getArtist();
+    audio.current.addEventListener("timeupdate", (event) => {
+      setProgress(event.currentTarget.currentTime);
     });
+    audio.current.volume = volume;
+    return () => {
+      audio.current.removeEventListener("ended", () => {});
+      audio.current.removeEventListener("timeupdate", () => {});
+    };
+  }, []);
 
-    function VolumeIconAnimation(value) {
-      // Show Icons according to value
-      switch (true) {
-        case value === 0:
-          document.querySelector(".volume-mute").classList.remove("d-none");
-          document.querySelector(".volume-low").classList.add("d-none");
-          document.querySelector(".volume-medium").classList.add("d-none");
-          document.querySelector(".volume-high").classList.add("d-none");
-          break;
-        case value > 0 && value <= 25:
-          document.querySelector(".volume-mute").classList.add("d-none");
-          document.querySelector(".volume-low").classList.remove("d-none");
-          document.querySelector(".volume-medium").classList.add("d-none");
-          document.querySelector(".volume-high").classList.add("d-none");
-
-          break;
-        case value > 25 && value <= 75:
-          document.querySelector(".volume-mute").classList.add("d-none");
-          document.querySelector(".volume-low").classList.add("d-none");
-          document.querySelector(".volume-medium").classList.remove("d-none");
-          document.querySelector(".volume-high").classList.add("d-none");
-
-          break;
-        case value > 75 && value <= 100:
-          document.querySelector(".volume-mute").classList.add("d-none");
-          document.querySelector(".volume-low").classList.add("d-none");
-          document.querySelector(".volume-medium").classList.add("d-none");
-          document.querySelector(".volume-high").classList.remove("d-none");
-          break;
-        default:
-          //document.querySelector("ion-icon[name='volume-off-outline']").classList.toggle("d-none")
-          break;
-      }
-    }
-
-    function calculateCurrentSliderProgress(e) {
-      e = e || window.event;
-      e.preventDefault();
-      let value = 0;
-
-      slider.style.width = e.offsetX + "px";
-      sliderThumb.style.left = e.offsetX + volumeIcon + "px";
-
-      //calculate the value of the slider
-      if (
-        slider.style.width.slice(0, slider.style.width.length - 2) >= trackwidth
-      ) {
-        value = 100;
-        sliderThumb.style.left = trackwidth + trackoffset - volumeIcon + "px";
-      } else if (
-        slider.style.width.slice(0, slider.style.width.length - 2) <= 0
-      ) {
-        value = 0;
-        sliderThumb.style.left = volumeIcon + "px";
-      } else {
-        value = parseInt(
-          (slider.style.width.slice(0, slider.style.width.length - 2) /
-            trackwidth) *
-            100
-        );
-      }
-      VolumeIconAnimation(value);
-    }
-
-    function closeDragElement() {
-      // stop moving when mouse button is released:
-      track.onmouseup = null;
-      document.onmousemove = null;
-    }
-
-    function mute() {
-      sliderThumb.style.left = volumeIcon + "px";
-      slider.style.width = 0 + "px";
-      VolumeIconAnimation(0);
-    }
-    [...document.querySelectorAll(".volumeIcon")].map((icon) =>
-      icon.addEventListener("click", () => mute())
-    );
-    this.audio.src = this.props.track.preview;
-    this.audio.addEventListener("timeupdate", (event) => {
-      this.setState((state) => {
-        return {
-          currentTrackProgress: event.currentTarget.currentTime,
-        };
+  const nextTrack = () => {
+    const oldTrackIndex = queue.findIndex((e) => e.id === track.id);
+    if (queue[oldTrackIndex + 1]) {
+      dispatch({
+        type: "SET_TRACK",
+        payload: queue[oldTrackIndex + 1],
       });
-    });
-    this.audio.addEventListener("ended", (event) => {
-      const oldTrackIndex = this.props.queue.findIndex(
-        (e) => e.id === this.props.track.id
-      );
-      try {
-        this.audio.src = this.props.queue[oldTrackIndex + 1]?.preview;
-        this.props.setTrack(this.props.queue[oldTrackIndex + 1]);
-        this.audio.play();
-        this.props.play();
-      } catch (error) {
-        console.log(error);
-        this.audio.src = "";
-        this.props.stop();
-      }
-    });
-    this.props.playing === true && this.audio.play();
-  }
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.playing !== this.props.playing) {
-      this.audio.src = this.props.track.preview;
-      this.props.playing === true ? this.audio.play() : this.audio.pause();
+      dispatch({ type: "PLAY_TRACK" });
+    } else {
+      dispatch({ type: "PAUSE_TRACK" });
     }
-    if (prevProps.player.pause !== this.props.player.pause) {
-      this.props.player.pause === true ? this.audio.pause() : this.audio.play();
+  };
+
+  useEffect(() => {
+    getArtist();
+    if (play) {
+      audio.current.play();
+      audio.current.addEventListener("ended", () => nextTrack());
+    } else {
+      audio.current.ended || audio.current.pause();
     }
-  }
+  }, [play, track]);
 
-  render() {
-    const { play, pause, stop, setTrack } = this.props;
+  useEffect(() => {
+    audio.current.volume = volume;
+  }, [volume]);
 
-    return (
-      <footer className="player fixed-bottom">
+  return (
+    <Styles>
+      <div className="player fixed-bottom">
+        <audio ref={audio} src={track?.preview}></audio>
         <div className="row align-items-center">
           {/*Start Preview */}
           <div className="col">
             <div className="d-flex flex-row align-items-center ml-2">
               <img
                 className="img-fluid ml-3"
-                src={this.props.track?.artist?.picture ?? playerPreview}
+                src={artistImg ?? playerPreview}
                 alt="playerPreview"
                 style={{ maxWidth: "6vh" }}
               />
               <div className="player-preview-text d-inline-block d-sm-flex flex-column mx-2">
                 <span className="text-white">
-                  {this.props.track?.title_short ?? "Song For My Father"}
+                  {track?.title_short ?? track?.title}
                 </span>
                 <span className="text-muted">
-                  {this.props.track?.artist?.name ?? "Horace Silverman"}
+                  {track?.artist?.name ?? "Horace Silverman"}
                 </span>
               </div>
             </div>
@@ -214,32 +181,30 @@ class MediaPlayer extends Component {
                   height="30px"
                   width="30px"
                   onClick={() => {
-                    const oldTrackIndex = this.props.queue.findIndex(
-                      (e) => e.id === this.props.track.id
+                    const oldTrackIndex = queue.findIndex(
+                      (e) => e.id === track.id
                     );
                     try {
-                      this.audio.src =
-                        this.props.queue[oldTrackIndex - 1]?.preview;
-                      this.audio.play();
-                      setTrack(this.props.queue[oldTrackIndex - 1]);
-                      play();
+                      dispatch({
+                        type: "SET_TRACK",
+                        payload: queue[oldTrackIndex - 1],
+                      });
+                      dispatch({ type: "PLAY_TRACK" });
                     } catch (error) {
                       console.log(error);
-                      this.audio.src = "";
-                      stop();
+                      dispatch({ type: "PAUSE_TRACK" });
                     }
                   }}
                 />
-                {!this.props.player.pause ? (
-                  <PauseOutline
-                    color={"#c0c0c0"}
+                {play ? (
+                  <PauseCircleOutline
+                    color={"#ffffff"}
                     className="songlist-stopbutton"
                     title={"pauseOutline"}
                     height="25px"
                     width="25px"
                     onClick={() => {
-                      this.audio.src = ``;
-                      pause();
+                      dispatch({ type: "PAUSE_TRACK" });
                     }}
                   />
                 ) : (
@@ -249,9 +214,7 @@ class MediaPlayer extends Component {
                     height="30px"
                     width="30px"
                     onClick={() => {
-                      this.audio.src = `${this.props.track.preview}`;
-                      this.audio.play();
-                      play();
+                      dispatch({ type: "PLAY_TRACK" });
                     }}
                   />
                 )}
@@ -261,19 +224,18 @@ class MediaPlayer extends Component {
                   height="30px"
                   width="30px"
                   onClick={() => {
-                    const oldTrackIndex = this.props.queue.findIndex(
-                      (e) => e.id === this.props.track.id
+                    const oldTrackIndex = queue.findIndex(
+                      (e) => e.id === track.id
                     );
                     try {
-                      this.audio.src =
-                        this.props.queue[oldTrackIndex + 1]?.preview;
-                      setTrack(this.props.queue[oldTrackIndex + 1]);
-                      this.audio.play();
-                      play();
+                      dispatch({
+                        type: "SET_TRACK",
+                        payload: queue[oldTrackIndex + 1],
+                      });
+                      dispatch({ type: "PLAY_TRACK" });
                     } catch (error) {
                       console.log(error);
-                      this.audio.src = "";
-                      stop();
+                      dispatch({ type: "PAUSE_TRACK" });
                     }
                   }}
                 />
@@ -288,20 +250,22 @@ class MediaPlayer extends Component {
             <div className="player-song-progress row">
               <div className="col d-flex align-items-center">
                 <span className="mx-2">
-                  {(parseFloat(this.state.currentTrackProgress) / 60)
+                  {(parseFloat(currentTrackProgress) / 60)
                     .toFixed(2)
                     .split(".")
                     .join(":")}
                 </span>
                 <ProgressBar
-                  now={this.state.currentTrackProgress}
-                  style={{ width: "200px", height: "9px" }}
+                  now={currentTrackProgress}
+                  style={{ width: "200px", height: "4px" }}
                 />
                 <span className="mx-2">
-                  {(parseFloat(this.props.track.duration) / 60)
-                    .toFixed(2)
-                    .split(".")
-                    .join(":")}
+                  {track.duration
+                    ? (parseFloat(track.duration) / 60)
+                        .toFixed(2)
+                        .split(".")
+                        .join(":")
+                    : "0:00"}
                 </span>
               </div>
             </div>
@@ -325,68 +289,13 @@ class MediaPlayer extends Component {
                 width="30px"
               />
             </Link>
-
-            <div className="track-container position-relative d-flex align-items-center">
-              <VolumeMuteOutline
-                color={"#ffffff"}
-                title={"play"}
-                height="250px"
-                width="25px"
-                className="volumeIcon volume-mute mr-2"
-              />
-              <VolumeLowOutline
-                color={"#ffffff"}
-                title={"play"}
-                height="25px"
-                width="25px"
-                className="volumeIcon volume-low d-none mr-2"
-              />
-              <VolumeMediumOutline
-                color={"#ffffff"}
-                title={"play"}
-                height="25px"
-                width="25px"
-                className="volumeIcon volume-medium d-none mr-2"
-              />
-              <VolumeHighOutline
-                color={"#ffffff"}
-                title={"play"}
-                height="25px"
-                width="25px"
-                className="volumeIcon volume-high d-none mr-2"
-              />
-              <VolumeOffOutline
-                color={"#ffffff"}
-                title={"play"}
-                height="25px"
-                width="25px"
-                className="volumeIcon volume-off d-none mr-2"
-              />
-              <div className="slider-thumb" />
-              <div className="track position-relative">
-                <div className="slider position-absolute"></div>
-              </div>
-            </div>
+            <VolumeBar />
           </div>
           {/* End Volume */}
         </div>
-      </footer>
-    );
-  }
-}
+      </div>
+    </Styles>
+  );
+};
 
-const mapStateToProps = (state) => ({
-  track: state.player.track,
-  player: state.player,
-  queue: state.queue,
-  playing: state.player.play,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  play: () => dispatch({ type: "PLAY_TRACK" }),
-  pause: () => dispatch({ type: "PAUSE_TRACK" }),
-  stop: () => dispatch({ type: "STOP_TRACK" }),
-  setTrack: (track) => dispatch({ type: "SET_TRACK", payload: track }),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(MediaPlayer);
+export default MediaPlayer;

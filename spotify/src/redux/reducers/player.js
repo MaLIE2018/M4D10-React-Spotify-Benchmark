@@ -1,7 +1,7 @@
 const initialstate = {
   track: {}, 
   play: false, 
-  pause: true
+  volume: 0.1
 };
 
 const PlayerReducer= (state = initialstate, action) =>{
@@ -9,11 +9,11 @@ const PlayerReducer= (state = initialstate, action) =>{
         case "SET_TRACK":
           return {...state,track:{...action.payload}}
         case "PLAY_TRACK":
-          return {...state, play: true, pause:false}
+          return {...state, play: true}
         case "PAUSE_TRACK":
-          return {...state, play: true, pause:true}
-        case "STOP_TRACK":
-            return {...state, play: false, pause:true}  
+          return {...state, play: false}
+          case "SET_VOLUME":
+          return {...state, volume: action.payload}
         default:
           return state
       }
