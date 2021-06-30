@@ -9,7 +9,7 @@ const MenuContainer = styled.div`
     position: fixed;
     padding-top: 88px;
     inset: 0px;
-    z-index: 10;
+    z-index: -1050;
     background-color: rgba(0, 0, 0, 0.85);
     &.slide-out-bottom {
       -webkit-animation: ${wSlideOutBottom} 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53)
