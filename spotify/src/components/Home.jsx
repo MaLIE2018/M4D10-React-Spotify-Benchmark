@@ -11,15 +11,11 @@ class Home extends Component {
   };
 
   componentDidMount = async () => {
-    let url = api + "/artist/412/top?limit=50";
+    let url = api + "/artist/2637/top?limit=50";
     const data = await FetchModule.retrieveData(url);
     this.setState((state) => {
       return { data: HelperModule.uniqueAlbums(data.data) };
     });
-    // HelperModule.createAlbums(
-    //   HelperModule.uniqueAlbums(data.data),
-    //   document.querySelector(".album-row")
-    // );
   };
   render() {
     return (

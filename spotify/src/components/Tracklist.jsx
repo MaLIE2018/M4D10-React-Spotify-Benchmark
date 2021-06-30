@@ -1,38 +1,35 @@
-import React, { Component } from "react";
+import React from "react";
 import TrackRow from "./TrackRow";
+import MobileTrackRow from "./playlist/TrackRow";
 import { withRouter } from "react-router-dom";
 import "../css/Tracklist.css";
 
-class Tracklist extends Component {
-  state = {
-    currTrackId: "",
-  };
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.currTrackId !== this.state.currTrackId) {
-      this.props.history.push(
-        this.props.match.url + "/" + this.state.currTrackId
-      );
-    }
-  }
+import { useMediaQuery } from "react-responsive";
 
-  handleClick = (id) => {
-    this.setState((state) => {
-      return { currTrackId: id };
-    });
-  };
+const Tracklist = (props) => {
+  const isMobile = useMediaQuery({ maxWidth: 718 });
 
-  render() {
-    return this.props.tracks.map((track) => {
+  return props.tracks.map((track, index) => {
+    if (!isMobile) {
       return (
         <TrackRow
           track={track}
           key={track.id}
-          albumId={this.props.albumId}
-          onCLickHandler={this.handleClick}
+          albumId={props.albumId}
+          index={index}
         />
       );
-    });
-  }
-}
+    } else {
+      return (
+        <MobileTrackRow
+          track={track}
+          key={track.id}
+          albumId={props.albumId}
+          index={index}
+        />
+      );
+    }
+  });
+};
 
 export default withRouter(Tracklist);

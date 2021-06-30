@@ -17,6 +17,7 @@ import Favs from './components/Favs';
 import {useSelector} from "react-redux"
 import { useMediaQuery } from 'react-responsive';
 import Player from "../src/components/player/Player";
+import Menu from "../src/components/menu/Menu";
 export const api = "https://striveschool-api.herokuapp.com/api/deezer"
 
 function App(props) {
@@ -60,6 +61,7 @@ function App(props) {
 
     <Router>
       <Player />
+      <Menu />
      { !isMobile?<NavBar />:<Nav/>}
       <Container fluid>
         <MediaPlayer/>

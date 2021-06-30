@@ -71,7 +71,7 @@ class Search extends Component {
             </h1>
             <div className="row">
               <div
-                className="search-songlist col w-100 mt-5 overflow-auto"
+                className="search-songlist col w-100 mt-0 mt-md-5 overflow-auto"
                 style={{ maxHeight: "20vh" }}
               >
                 {this.state.data?.data !== undefined && (

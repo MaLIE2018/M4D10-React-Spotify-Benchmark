@@ -3,7 +3,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { theme } from "../../index";
 import { TrackRowContainer, Track, AlbumTitle, TrackNumber } from "./styles";
-
+import { Link } from "react-router-dom";
 const TrackRow = (props) => {
   const dispatch = useDispatch();
   const player = useSelector((state) => state.player);

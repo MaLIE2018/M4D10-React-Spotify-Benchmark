@@ -45,7 +45,8 @@ export const StickyHeader = styled.div`
 `
 export const EntityHeader = styled.div`
     padding: 64px 16px 0px;
-    background: linear-gradient(rgb(32, 80, 96) 0%, transparent 100%);
+    background: ${props => {
+      return props.color?`linear-gradient(rgb(${props.color.r}, ${props.color.g}, ${props.color.b}) 0%, transparent 100%)`:"linear-gradient(rgb(32, 80, 96) 0%, transparent 100%)"}}; //
     display: flex;
     flex-direction: column;
     width: 100%;

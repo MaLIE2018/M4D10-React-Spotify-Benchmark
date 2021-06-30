@@ -86,9 +86,9 @@ const Menu = () => {
             <span> View Artist</span>
           </li>
         </Link>
-        {selectedTrack?.album?.id ?? (
+        {selectedTrack?.albumId && (
           <Link
-            to={`/album/${selectedTrack?.album?.id}`}
+            to={`/album/${selectedTrack?.albumId}`}
             onClick={() => dispatch({ type: "SHOW_MENU" })}
           >
             <li>

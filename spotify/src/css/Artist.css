@@ -30,9 +30,9 @@
   color: var(--sidebar-text-color);
 }
 
-.artist-header h1 {
+/* .artist-header h1 {
   font-size: 96px;
-}
+} */
 
 .artist-header h5 {
   font-size: 0.9rem;

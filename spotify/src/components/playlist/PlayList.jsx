@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { createRef, useEffect, useState } from "react";
 import TopNav from "../nav/TopNav";
 
 import TrackRow from "./TrackRow";
-import Menu from "../menu/Menu";
 import * as FetchModule from "../../modules/retrievedata.js";
+import { getColor, getColorSync } from "../../modules/helper";
 
 import { EntityHeader, StickyHeader, Image, EntityView } from "./styles";
 import { H1, SubTitle, Button, Info } from "../../styles/styles";
@@ -16,7 +16,10 @@ import { useDispatch, useSelector } from "react-redux";
 
 const PlayList = (props) => {
   const [data, setData] = useState({});
-  const { ref, inView, entry } = useInView({
+  const [color, setColor] = useState({});
+  const [firstRun, setFirstRun] = useState(true);
+  const img = createRef();
+  const { ref, inView } = useInView({
     threshold: 0.5,
     initialInView: true,
   });
@@ -24,6 +27,7 @@ const PlayList = (props) => {
   const player = useSelector((state) => state.player);
   const dispatch = useDispatch();
   const { play } = player;
+
   const getData = async () => {
     let url = api + `/album/${albumId}`;
     const responseData = await FetchModule.retrieveData(url);
@@ -34,20 +38,35 @@ const PlayList = (props) => {
     getData();
   }, []);
 
+  async function wtf() {
+    const color = await getColor(img.current);
+    setColor(color);
+  }
+  useEffect(() => {
+    if (firstRun) {
+      setFirstRun(false);
+    } else {
+      wtf();
+    }
+  }, [data]);
+
   return (
     <>
-      <Menu />
       <TopNav inView={inView} />
       <StickyHeader>
-        <EntityHeader>
-          <Image src={data?.cover} alt=""></Image>
-          <H1>{data?.artist?.name}</H1>
+        <EntityHeader color={color}>
+          <Image ref={img} src={data?.cover_medium} alt=""></Image>
+          <H1>{data?.title}</H1>
           <SubTitle>
             Heisse Tracks fuer heisse Tage: Hier ist dein Soundtrack fuer den
             Sommer.
           </SubTitle>
           <Info>
-            {data?.release_date?.slice(0, 4)} • {data?.fans} likes • 1H 25 MIN
+            {data?.release_date?.slice(0, 4)} • {data?.fans} likes •{" "}
+            {data?.duration / 3600 >= 1
+              ? `${parseInt(data?.duration / 3600)} H`
+              : ""}
+            {((data?.duration / 60) % 60).toFixed(0)} MIN
           </Info>
         </EntityHeader>
       </StickyHeader>
@@ -71,7 +90,11 @@ const PlayList = (props) => {
         </Button>
         {data.tracks &&
           data.tracks.data.map((track, index) => (
-            <TrackRow key={track.id} track={track} index={index} />
+            <TrackRow
+              key={track.id}
+              track={{ ...track, albumId: data.id }}
+              index={index}
+            />
           ))}
       </EntityView>
     </>

@@ -1,5 +1,6 @@
-let audio = ''
-
+import FastAverageColor from 'fast-average-color';
+import imageToBase64 from 'image-to-base64/browser'
+import getAverageColor from 'get-average-color'
 //Get unique albums in a query search and artist fetch
 export const uniqueAlbums = (data) => {
     let uniqueAlbums = [];
@@ -24,6 +25,7 @@ export const getTracks = (data) => {
             title: song.title,
             duration: song.duration,
             id:song.id,
+            albumId: song.album.id,
             trackListURL: song.album.tracklist
         })
     })
@@ -31,21 +33,19 @@ export const getTracks = (data) => {
     return tracks
 }
 
-export function playMusic(event, url) {
-    if (event.currentTarget.children[0].classList.contains("d-none")) { //stopbutton [0]
-        if (event.currentTarget.children[1].classList.contains("played")) {
-            audio.play()
-        } else {
-            audio = new Audio(url)
-            audio.play()
-        }
-        event.currentTarget.children[1].classList.add("d-none")
-        event.currentTarget.children[1].classList.add("played") // playbutton[]
-        event.currentTarget.children[0].classList.remove("d-none")
-    } else {
-        audio.pause()
-        event.currentTarget.children[1].classList.remove("d-none")
-        event.currentTarget.children[0].classList.add("d-none")
-    }
-    // 
+export const getTrackTime = (duration) => {
+        let hours = duration / 3600
+        let min = duration 
 }
+
+
+
+export const getColor = async(image) => {
+  try {
+    const color = await getAverageColor(image.src)
+    return color
+  } catch (error) {
+    console.log(error)
+  }
+}
+
