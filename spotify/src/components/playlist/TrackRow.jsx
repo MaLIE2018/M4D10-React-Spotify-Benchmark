@@ -33,6 +33,7 @@ const TrackRow = (props) => {
       <div
         onClick={(e) => {
           e.preventDefault();
+          dispatch({ type: "SET_SELECTED_TRACK", payload: props.track });
           dispatch({ type: "SHOW_MENU" });
         }}
       >

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import TopNav from "../nav/TopNav";
-import Player from "../player/Player";
+
 import TrackRow from "./TrackRow";
 import Menu from "../menu/Menu";
 import * as FetchModule from "../../modules/retrievedata.js";
@@ -36,7 +36,6 @@ const PlayList = (props) => {
 
   return (
     <>
-      <Player />
       <Menu />
       <TopNav inView={inView} />
       <StickyHeader>
@@ -72,7 +71,7 @@ const PlayList = (props) => {
         </Button>
         {data.tracks &&
           data.tracks.data.map((track, index) => (
-            <TrackRow track={track} index={index} />
+            <TrackRow key={track.id} track={track} index={index} />
           ))}
       </EntityView>
     </>

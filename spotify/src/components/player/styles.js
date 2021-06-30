@@ -54,7 +54,7 @@ const slideOutBottom = keyframes`
     width: 100vw;
     height: 100vh;
     opacity: 0;
-    z-index: 9;
+    z-index: 1050;
     background-image: linear-gradient(rgba(176, 0, 56, 1), rgb(0, 0, 0) 85%);
 
     &.slide-out-bottom {

@@ -16,6 +16,7 @@ import {useState, useEffect} from "react"
 import Favs from './components/Favs';
 import {useSelector} from "react-redux"
 import { useMediaQuery } from 'react-responsive';
+import Player from "../src/components/player/Player";
 export const api = "https://striveschool-api.herokuapp.com/api/deezer"
 
 function App(props) {
@@ -23,7 +24,6 @@ function App(props) {
   const [currTrack,setTrack] = useState({})
   const {queue, favorites} = useSelector((state) => state)
   const isMobile = useMediaQuery({ maxWidth: 718 })
-  console.log('isMobile:', isMobile)
 
   useEffect(() => {
     setPath(() => {
@@ -59,8 +59,11 @@ function App(props) {
   return (
 
     <Router>
+      <Player />
      { !isMobile?<NavBar />:<Nav/>}
       <Container fluid>
+        <MediaPlayer/>
+        <MobileMediaPlayer/>
         <Row>
           <Switch>
             <Route path="/home" component={Home}/>
@@ -72,8 +75,6 @@ function App(props) {
             <Redirect from="/" to="/home" />
           </Switch>
         </Row>
-        <MediaPlayer/>
-        <MobileMediaPlayer/>
       </Container>
     </Router>
   );

@@ -5,9 +5,13 @@ import { TopHeader } from "./styles";
 import { theme } from "../../index";
 import { Button, TopNavTitle } from "../../styles/styles";
 import { withRouter } from "react-router";
+import { useSelector } from "react-redux";
 
 const TopNav = (props) => {
   const { inView } = props;
+  const player = useSelector((state) => state.player);
+
+  const { track } = player;
   return (
     <TopHeader inView={inView}>
       <AiOutlineArrowLeft
@@ -18,7 +22,7 @@ const TopNav = (props) => {
       {!inView ? (
         <Button>FOLLOW</Button>
       ) : (
-        <TopNavTitle>Sommer Chillout</TopNavTitle>
+        <TopNavTitle>{track?.artist?.name}</TopNavTitle>
       )}
       <BsThreeDotsVertical color={theme.sc} size={theme.NavIconSize} />
     </TopHeader>

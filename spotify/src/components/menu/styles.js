@@ -48,13 +48,15 @@ const MenuContainer = styled.div`
 const List = styled.ul`
     list-style-type: none;
     padding-left: 1rem;
+    a{
+      span{
+        margin-left:1rem
+      }
+    }
     li{
       line-height:4rem;
       display:flex;
       align-items: center;
-    }
-    a{
-      margin-left: 1rem
     }
 `
 
