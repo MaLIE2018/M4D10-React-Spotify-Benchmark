@@ -5,6 +5,7 @@ export const NowPlayer = styled.div`
   bottom: 52.3px;
   right:0;
   left:0;
+  visibility: ${(props) => (!props.isMobile ? "hidden" : "visible")};
   position: fixed;
   padding-left: .8rem;
   padding-right: .8rem;

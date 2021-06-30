@@ -6,14 +6,16 @@ import { BsHeartFill } from "react-icons/bs";
 import { NowPlayer, Title, Artist, ProgressBar } from "./styles";
 import { theme } from "../../index";
 import { useDispatch, useSelector } from "react-redux";
+import { useMediaQuery } from "react-responsive";
 
 const MobileMediaPlayer = (props) => {
   const dispatch = useDispatch();
   const player = useSelector((state) => state.player);
   const favorites = useSelector((state) => state.favorites);
   const { track, play, trackProgress } = player;
+  const isMobile = useMediaQuery({ maxWidth: 718 });
   return (
-    <NowPlayer>
+    <NowPlayer isMobile={isMobile}>
       <ProgressBar id="file" value={trackProgress} max="100" />
       <div>
         {!favorites.some((f) => f?.id === track?.id) ? (
