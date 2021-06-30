@@ -42,6 +42,21 @@ export const setTrack = (track) => {
     payload: track
   }
 }
+
+export const setTrackProgress= (count) => {
+  return { 
+    type: "SET_TRACK_PROGRESS",
+    payload: count
+  }
+}
+export const setTrackProgressNull= () => {
+  return { 
+    type: "SET_TRACK_PROGRESS_NULL",
+    payload: 0
+  }
+}
+
+
 export const playTrack = () => {
   return { 
     type: "PLAY_TRACK",
@@ -57,5 +72,17 @@ export const pauseTrack = () => {
 export const setVolume = () => {
   return { 
     type: "SET_VOLUME",
+  }
+}
+
+export const showPlayer = () => {
+  return {
+    type:"SHOW_PLAYER"
+  }
+}
+
+export const showMenu = () => {
+  return {
+    type:"SHOW_MENU",
   }
 }

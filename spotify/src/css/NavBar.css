@@ -6,8 +6,6 @@
   background-color: var(--home-bg-color);
   color: var(--sidebar-text-color);
   font-weight: 700;
-  max-height: 95vh;
-  min-height: 95vh;
   overflow-y: auto;
 }
 

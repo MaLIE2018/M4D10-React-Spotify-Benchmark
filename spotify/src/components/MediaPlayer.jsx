@@ -17,11 +17,16 @@ import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import * as FetchModule from "../modules/retrievedata.js";
 import { api } from "../App";
+import { useMediaQuery } from "react-responsive";
 
 const Styles = styled.footer`
   .player {
-    max-height: 10vh;
     background-color: var(--footer-bg-color);
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    padding: 0.8rem;
+    visibility: ${(props) => (props.isMobile ? "hidden" : "visible")};
   }
 
   .player-controls {
@@ -39,24 +44,8 @@ const Styles = styled.footer`
     white-space: nowrap;
     overflow: hidden;
   }
-
-  .player .player-progress-divider {
-    height: 2px;
-    background-color: #404040;
-  }
-
-  .player .player-song-progress span {
-    font-size: 0.7rem;
-    color: var(--footer-player-text-color);
-  }
-
-  .player .player-volume-bar {
-    height: 2px;
-    background-color: var(--footer-player-text-color);
-  }
-
   .container {
-    height: 10vh;
+    /* height: 10vh; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -78,9 +67,11 @@ const MediaPlayer = (props) => {
   const dispatch = useDispatch();
   const player = useSelector((state) => state.player);
   const queue = useSelector((state) => state.queue);
-  const [currentTrackProgress, setProgress] = useState(0);
-  const { track, play, volume } = player;
+
+  const { track, play, volume, trackProgress } = player;
   const [artistImg, setArtistImg] = useState("");
+  const isTablet = useMediaQuery({ maxWidth: 872 });
+  const isMobile = useMediaQuery({ maxWidth: 718 });
 
   const getArtist = async () => {
     if (track?.artist?.id) {
@@ -94,13 +85,16 @@ const MediaPlayer = (props) => {
   useEffect(() => {
     getArtist();
     audio.current.addEventListener("timeupdate", (event) => {
-      setProgress(event.currentTarget.currentTime);
+      dispatch({
+        type: "SET_TRACK_PROGRESS",
+        payload: event.currentTarget.currentTime,
+      });
     });
     audio.current.volume = volume;
-    return () => {
-      audio.current.removeEventListener("ended", () => {});
-      audio.current.removeEventListener("timeupdate", () => {});
-    };
+    // return () => {
+    //   audio.current.removeEventListener("ended", () => {});
+    //   audio.current.removeEventListener("timeupdate", () => {});
+    // };
   }, []);
 
   const nextTrack = () => {
@@ -131,169 +125,158 @@ const MediaPlayer = (props) => {
   }, [volume]);
 
   return (
-    <Styles>
-      <div className="player fixed-bottom">
+    <Styles isMobile={isMobile}>
+      <div className="player fixed-bottom d-flex justify-content-between">
         <audio ref={audio} src={track?.preview}></audio>
-        <div className="row align-items-center">
-          {/*Start Preview */}
-          <div className="col">
-            <div className="d-flex flex-row align-items-center ml-2">
-              <img
-                className="img-fluid ml-3"
-                src={artistImg ?? playerPreview}
-                alt="playerPreview"
-                style={{ maxWidth: "6vh" }}
-              />
-              <div className="player-preview-text d-inline-block d-sm-flex flex-column mx-2">
-                <span className="text-white">
-                  {track?.title_short ?? track?.title}
-                </span>
-                <span className="text-muted">
-                  {track?.artist?.name ?? "Horace Silverman"}
-                </span>
-              </div>
-            </div>
-            <div className="ml-3">
-              <ion-icon
-                className="player-controls mx-1 d-none d-sm-none d-md-none d-lg-none d-lg-inline-block"
-                name="heart-outline"
-              />
-              <ion-icon
-                className="player-controls mx-1 d-none d-sm-none d-md-none d-lg-none d-lg-inline-block"
-                name="laptop-outline"
-              />
-            </div>
+        {/*Start Preview */}
+
+        <div className="d-flex flex-row align-items-center">
+          <img
+            className="img-fluid mx-3"
+            src={artistImg ?? playerPreview}
+            alt="playerPreview"
+            style={{ maxWidth: "6vh" }}
+          />
+          <div className="player-preview-text d-flex flex-column">
+            <span className="text-white">
+              {track?.title_short ?? track?.title}
+            </span>
+            <span className="text-muted">
+              {track?.artist?.name ?? "Horace Silverman"}
+            </span>
           </div>
-          {/* End Preview  */}
-          {/* Start Playercontrols */}
-          <div className="col d-flex flex-column align-items-center">
-            <div className="row">
-              <div className="player-controls d-flex col mt-2 align-items-center">
-                <ShuffleOutline
-                  color={"#ffffff"}
-                  title={"shuffle"}
-                  height="30px"
-                  width="30px"
-                />
-                <PlaySkipBackOutline
-                  color={"#ffffff"}
-                  title={"PlaySkipBack"}
-                  height="30px"
-                  width="30px"
-                  onClick={() => {
-                    const oldTrackIndex = queue.findIndex(
-                      (e) => e.id === track.id
-                    );
-                    try {
-                      dispatch({
-                        type: "SET_TRACK",
-                        payload: queue[oldTrackIndex - 1],
-                      });
-                      dispatch({ type: "PLAY_TRACK" });
-                    } catch (error) {
-                      console.log(error);
-                      dispatch({ type: "PAUSE_TRACK" });
-                    }
-                  }}
-                />
-                {play ? (
-                  <PauseCircleOutline
-                    color={"#ffffff"}
-                    className="songlist-stopbutton"
-                    title={"pauseOutline"}
-                    height="25px"
-                    width="25px"
-                    onClick={() => {
-                      dispatch({ type: "PAUSE_TRACK" });
-                    }}
-                  />
-                ) : (
-                  <PlayCircleOutline
-                    color={"#ffffff"}
-                    title={"play"}
-                    height="30px"
-                    width="30px"
-                    onClick={() => {
-                      dispatch({ type: "PLAY_TRACK" });
-                    }}
-                  />
-                )}
-                <PlaySkipForwardOutline
-                  color={"#ffffff"}
-                  title={"forward"}
-                  height="30px"
-                  width="30px"
-                  onClick={() => {
-                    const oldTrackIndex = queue.findIndex(
-                      (e) => e.id === track.id
-                    );
-                    try {
-                      dispatch({
-                        type: "SET_TRACK",
-                        payload: queue[oldTrackIndex + 1],
-                      });
-                      dispatch({ type: "PLAY_TRACK" });
-                    } catch (error) {
-                      console.log(error);
-                      dispatch({ type: "PAUSE_TRACK" });
-                    }
-                  }}
-                />
-                <RepeatOutline
-                  color={"#ffffff"}
-                  title={"repeat"}
-                  height="30px"
-                  width="30px"
-                />
-              </div>
-            </div>
-            <div className="player-song-progress row">
-              <div className="col d-flex align-items-center">
-                <span className="mx-2">
-                  {(parseFloat(currentTrackProgress) / 60)
-                    .toFixed(2)
-                    .split(".")
-                    .join(":")}
-                </span>
-                <ProgressBar
-                  now={currentTrackProgress}
-                  style={{ width: "200px", height: "4px" }}
-                />
-                <span className="mx-2">
-                  {track.duration
-                    ? (parseFloat(track.duration) / 60)
-                        .toFixed(2)
-                        .split(".")
-                        .join(":")
-                    : "0:00"}
-                </span>
-              </div>
-            </div>
-          </div>
-          {/* End Playercontrols */}
-          {/* Start Volume */}
-          <div className="col player-controls d-none d-sm-none d-md-none d-lg-none d-xl-flex justify-content-end align-items-center ">
-            <Link to="/queue" className="mx-2">
-              <ReorderFourOutline
+          <ion-icon className="" name="heart-outline" />
+          <ion-icon className="player-controls" name="laptop-outline" />
+        </div>
+
+        {/* End Preview  */}
+        {/* Start Playercontrols */}
+        <div className="d-flex flex-column align-items-center justify-content-center">
+          <div className="d-flex align-items-center">
+            <ShuffleOutline
+              color={"#ffffff"}
+              title={"shuffle"}
+              height="30px"
+              width="30px"
+            />
+            <PlaySkipBackOutline
+              color={"#ffffff"}
+              title={"PlaySkipBack"}
+              height="30px"
+              width="30px"
+              onClick={() => {
+                const oldTrackIndex = queue.findIndex((e) => e.id === track.id);
+                try {
+                  dispatch({
+                    type: "SET_TRACK",
+                    payload: queue[oldTrackIndex - 1],
+                  });
+                  dispatch({ type: "PLAY_TRACK" });
+                } catch (error) {
+                  console.log(error);
+                  dispatch({ type: "PAUSE_TRACK" });
+                }
+              }}
+            />
+            {play ? (
+              <PauseCircleOutline
                 color={"#ffffff"}
-                title={"reorder"}
-                height="30px"
+                className="songlist-stopbutton"
+                title={"pauseOutline"}
+                height="25px"
+                width="25px"
+                onClick={() => {
+                  dispatch({ type: "PAUSE_TRACK" });
+                }}
               />
-            </Link>
-            <Link to="/">
-              {" "}
-              <LaptopOutline
+            ) : (
+              <PlayCircleOutline
                 color={"#ffffff"}
-                title={"speaker"}
+                title={"play"}
                 height="30px"
                 width="30px"
+                onClick={() => {
+                  dispatch({ type: "PLAY_TRACK" });
+                }}
               />
-            </Link>
-            <VolumeBar />
+            )}
+            <PlaySkipForwardOutline
+              color={"#ffffff"}
+              title={"forward"}
+              height="30px"
+              width="30px"
+              onClick={() => {
+                const oldTrackIndex = queue.findIndex((e) => e.id === track.id);
+                try {
+                  dispatch({
+                    type: "SET_TRACK",
+                    payload: queue[oldTrackIndex + 1],
+                  });
+                  dispatch({ type: "PLAY_TRACK" });
+                } catch (error) {
+                  console.log(error);
+                  dispatch({ type: "PAUSE_TRACK" });
+                }
+              }}
+            />
+            <RepeatOutline
+              color={"#ffffff"}
+              title={"repeat"}
+              height="30px"
+              width="30px"
+            />
           </div>
-          {/* End Volume */}
+          <div className="d-flex flex-row align-items-center">
+            <span>
+              {track.duration
+                ? (parseFloat(trackProgress) / 60)
+                    .toFixed(2)
+                    .split(".")
+                    .join(":")
+                : "0:00"}
+            </span>
+            <ProgressBar
+              now={trackProgress}
+              className="mx-2"
+              style={{
+                width: `${isTablet ? "100px" : "200px"}`,
+                height: "4px",
+              }}
+            />
+
+            <span>
+              {track.duration
+                ? (parseFloat(track.duration) / 60)
+                    .toFixed(2)
+                    .split(".")
+                    .join(":")
+                : "0:00"}
+            </span>
+          </div>
+        </div>
+        {/* End Playercontrols */}
+        {/* Start Volume */}
+        <div className="d-flex flex-row align-items-center">
+          <Link to="/queue" className="mx-2">
+            <ReorderFourOutline
+              color={"#ffffff"}
+              title={"reorder"}
+              height="30px"
+            />
+          </Link>
+          <Link to="/">
+            {" "}
+            <LaptopOutline
+              color={"#ffffff"}
+              title={"speaker"}
+              height="30px"
+              width="30px"
+            />
+          </Link>
+          <VolumeBar isTablet={isTablet} />
         </div>
       </div>
+      {/* End Volume */}
     </Styles>
   );
 };

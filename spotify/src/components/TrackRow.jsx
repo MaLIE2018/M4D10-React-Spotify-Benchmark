@@ -6,13 +6,14 @@ import * as Icon from "react-bootstrap-icons";
 import { useSelector, useDispatch, connect } from "react-redux";
 import { addToQueue } from "../redux/actions/index.js";
 import styled from "styled-components";
+import { useMediaQuery } from "react-responsive";
 
 const TrackRow = (props) => {
   const player = useSelector((state) => state.player);
   const currentSongId = useSelector((state) => state.player.track.id);
   const dispatch = useDispatch();
   const favorites = useSelector((state) => state.favorites);
-
+  const isMobile = useMediaQuery({ maxWidth: 718 });
   const { play } = player;
   const { track } = props;
 
@@ -25,16 +26,18 @@ const TrackRow = (props) => {
 
   return (
     <Styles>
-      <div className="album-songrow row flex-nowrap mx-1 my-1">
-        <div className="col-1 text-white d-inline-block d-md-flex justify-content-start justify-content-md-end align-items-center">
-          <MusicalNote
-            color={"#c0c0c0"}
-            title={"musicnote"}
-            height="25px"
-            width="25px"
-          />
-        </div>
-        <div className="col-1 text-white d-inline-block d-md-flex justify-content-center align-items-center">
+      <div className="album-songrow row flex-nowrap mx-2 mr-3 my-1">
+        {!isMobile ? (
+          <div className="col-1 text-white d-inline-block d-md-flex justify-content-start justify-content-md-end align-items-center">
+            <MusicalNote
+              color={"#c0c0c0"}
+              title={"musicnote"}
+              height="25px"
+              width="25px"
+            />
+          </div>
+        ) : null}
+        <div className="col-1 text-white d-flex justify-content-center align-items-center">
           {play && currentSongId === props.track.id ? (
             <PauseOutline
               color={"#c0c0c0"}

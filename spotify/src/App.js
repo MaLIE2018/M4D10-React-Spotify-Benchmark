@@ -1,27 +1,29 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/App.css';
-import {Container } from "react-bootstrap"
+import {Container,Row} from "react-bootstrap"
 import NavBar from "./components/NavBar.jsx"
-import {Row} from "react-bootstrap"
 import MediaPlayer from './components/MediaPlayer'
 import {Route, withRouter, Switch, BrowserRouter as Router, Redirect} from 'react-router-dom'
 import Home from './components/Home'
 import Album from "./components/Album"
+import PlayList from "./components/playlist/PlayList.jsx"
 import Artist from "./components/Artist"
 import Search from "./components/Search"
 import Queue from "./components/Queue"
+import Nav from "./components/nav/Nav.jsx"
+import MobileMediaPlayer from "./components/mediaplayer/MobileMediaPlayer.jsx"
 import {useState, useEffect} from "react"
-import {store} from "./redux/store/index.js"
 import Favs from './components/Favs';
 import {useSelector} from "react-redux"
+import { useMediaQuery } from 'react-responsive';
 export const api = "https://striveschool-api.herokuapp.com/api/deezer"
 
 function App(props) {
   const [currPath, setPath] = useState("")
   const [currTrack,setTrack] = useState({})
   const {queue, favorites} = useSelector((state) => state)
-
-  
+  const isMobile = useMediaQuery({ maxWidth: 718 })
+  console.log('isMobile:', isMobile)
 
   useEffect(() => {
     setPath(() => {
@@ -55,21 +57,23 @@ function App(props) {
 
 
   return (
+
     <Router>
+     { !isMobile?<NavBar />:<Nav/>}
       <Container fluid>
         <Row>
-          <NavBar />
           <Switch>
             <Route path="/home" component={Home}/>
-            <Route path={["/album/:albumId"]} component={Album}/>
+            <Route path={["/album/:albumId"]} component={!isMobile?Album:PlayList}/>
             <Route path={["/artist/:artistId"]}  component={Artist}/>
             <Route path="/search"component={Search}/>
             <Route path="/queue"component={Queue}/>
             <Route path="/favorites"component={Favs}/>
             <Redirect from="/" to="/home" />
           </Switch>
-          <MediaPlayer/>
         </Row>
+        <MediaPlayer/>
+        <MobileMediaPlayer/>
       </Container>
     </Router>
   );

@@ -1,4 +1,5 @@
 import logo from "../assets/img/spotify-1-logo-black-and-white.png";
+import logo2 from "../assets/img/spotify_logo_whit_wt.png";
 import "../css/NavBar.css";
 import {
   HomeOutline,
@@ -27,9 +28,9 @@ const Styles = styled.div`
 class NavBar extends Component {
   render() {
     return (
-      <div className="sidebar col-12 col-sm-1 col-md-2 d-flex flex-column sticky-top">
+      <div className="sidebar col-12 col-sm-1 col-md-2 fixed-top h-100">
         <Styles>
-          <ul className="sidebar-top-nav navbar-nav text-light ml-2">
+          <ul className="sidebar sidebar-top-nav navbar-nav text-light d-flex flex-column">
             <li className="nav-item mt-4">
               <div className="d-flex flex-row align-items-center">
                 <img
@@ -140,7 +141,7 @@ class NavBar extends Component {
               </div>
               <img
                 className="img-fluid d-none d-sm-block d-md-none "
-                src="../assets/img/spotify_logo_whit_wt.png"
+                src={logo2}
                 alt="spotifyLogo"
                 style={{ maxHeight: 40 }}
               />

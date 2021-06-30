@@ -47,25 +47,22 @@ class Search extends Component {
 
   render() {
     return (
-      <div className="search-section p-0 col-12 col-sm-11 col-md-10">
-        <div className="homepage col py-3 px-5">
+      <div className="search-section p-0 col-12 col-sm-11 col-md-10 ml-auto">
+        <div className="homepage col py-3 px-sm-5 px-3">
           {/* Navbar */}
-          <nav className="navbar navbar-expand-lg navbar-dark col-12">
-            <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-              <div className="navbar-nav d-flex">
-                <form className="form-inline my-2 my-lg-0">
-                  <input
-                    className="searchField form-control mr-sm-2 rounded-pill w-100"
-                    type="search"
-                    placeholder="Artists, songs, or podcasts"
-                    aria-label="Search"
-                    onChange={(e) => this.handleSearch(e)}
-                    value={this.state.searchText}
-                  />
-                </form>
-              </div>
-            </div>
-          </nav>
+          <div className="d-flex">
+            <form className="form-inline my-2 my-lg-0">
+              <input
+                className="searchField form-control mr-sm-2 rounded-pill w-100"
+                type="search"
+                placeholder="Artists, songs, or podcasts"
+                aria-label="Search"
+                onChange={(e) => this.handleSearch(e)}
+                value={this.state.searchText}
+              />
+            </form>
+          </div>
+
           {/* End Navbar */}
           {/* StartSongs */}
           <section>
@@ -93,7 +90,7 @@ class Search extends Component {
             <h1 id="h1" className="pt-3">
               Albums
             </h1>
-            <div className="album-row row d-flex justify-content-between">
+            <div className="row d-flex justify-content-sm-between justify-content-center">
               {this.state.uniqueAlbums?.map((album) => {
                 return <AlbumCard album={album} key={album.id} />;
               })}
@@ -105,7 +102,5 @@ class Search extends Component {
     );
   }
 }
-
-Search.propTypes = {};
 
 export default Search;

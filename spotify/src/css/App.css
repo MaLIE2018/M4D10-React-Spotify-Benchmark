@@ -9,6 +9,10 @@ html {
   background: transparent; /* Optional: just make scrollbar invisible */
 }
 
+body {
+  color: white;
+}
+
 .center-content {
   position: relative;
   left: 50%;
@@ -94,11 +98,6 @@ section.artist-albums h3 {
   #media
   queries
   \*------------------------------------*/
-@media screen and (max-height: 900px) {
-  .player {
-    padding-top: 1vh;
-  }
-}
 
 @media (max-width: 962px) {
   .sidebar .navbar-nav li span {
@@ -107,24 +106,13 @@ section.artist-albums h3 {
   .sidebar .sidebar-button {
     font-size: 0.8rem;
   }
-  .player-progress-divider {
-    width: 300px;
-  }
 }
 
 @media (max-width: 576px) {
-  .sidebar {
-    height: 10vh;
-  }
-  .player {
-    height: 15vh;
-  }
   .player-progress-divider {
     width: 75vw;
   }
-  .iframe-section {
-    height: 75vh;
-  }
+
   .artist-header h1 {
     font-size: 36px;
   }

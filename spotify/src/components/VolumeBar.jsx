@@ -9,17 +9,12 @@ import {
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { ProgressBar } from "react-bootstrap";
+
 const Styles = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  .track {
-    width: 200px;
-    height: 10px;
-    background-color: #9f9f9f;
-    border-radius: 10px;
-    overflow: hidden;
-  }
+
   .progress-bar {
     background-color: var(--spotify-color);
   }
@@ -60,7 +55,7 @@ const Styles = styled.div`
   }
 `;
 
-const VolumeBar = () => {
+const VolumeBar = (props) => {
   const dispatch = useDispatch();
   const track = createRef();
   const sliderThumb = createRef();
@@ -148,7 +143,10 @@ const VolumeBar = () => {
         <ProgressBar
           ref={track}
           now={volume * 100}
-          style={{ width: "200px", height: "4px" }}
+          style={{
+            width: `${props.isTablet ? "100px" : "200px"}`,
+            height: "4px",
+          }}
           className="mx-2"
         />
         <div ref={sliderThumb} className="slider-thumb"></div>

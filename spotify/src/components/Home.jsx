@@ -23,7 +23,7 @@ class Home extends Component {
   };
   render() {
     return (
-      <div className="p-0 col-12 col-sm-11 col-md-10">
+      <div className="p-0 col-12 col-sm-11 col-md-10 ml-auto">
         <div className="homepage col py-3 px-5">
           <nav className="navbar navbar-expand-lg navbar-dark col-12">
             <div className="collapse navbar-collapse" id="navbarNavAltMarkup">

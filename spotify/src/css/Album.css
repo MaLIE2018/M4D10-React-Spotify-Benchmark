@@ -5,6 +5,7 @@
 
 .album-section {
   background-color: black;
+  min-height: 100vh;
 }
 
 .albumsongs-section h6 {

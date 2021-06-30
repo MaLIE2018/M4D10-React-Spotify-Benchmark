@@ -37,9 +37,9 @@ class Album extends Component {
   render() {
     const albumId = this.props.match.params.albumId;
     return (
-      <div className="album-section p-0 col-12 col-sm-11 col-md-10">
+      <div className="album-section col-12 col-sm-11 col-md-10 ml-auto h-100">
         <div className="albumsongs-section row pb-3">
-          <div className="col-12 col-sm-4 d-flex flex-column align-items-center mt-5">
+          <div className="col-12 col-md-4 d-flex flex-column align-items-center  mt-5">
             <img className="album-img" src alt="albumcover" />
             <h1 className="album-title text-center mt-2">tt</h1>
             <Nav.Link
@@ -71,7 +71,7 @@ class Album extends Component {
               </div>
             </div>
           </div>
-          <div className="albumpage-songlist col-12 col-sm-8 mt-5">
+          <div className="albumpage-songlist col-12 col-md-8 mt-5 pr-0">
             {this.state.data?.tracks !== undefined && (
               <div className="pb-5 mb-5">
                 <Tracklist

@@ -20,14 +20,19 @@ const Favs = (props) => {
   const favorites = useSelector((state) => state.favorites);
 
   return favorites.length > 0 ? (
-    <Col className="queue">
+    <Col xs={12} sm={11} md={10} className="queue ml-auto">
       <Styles>
         <h1 className=" album-title pt-5 mb-5 ml-5">Liked Songs</h1>
         <Tracklist tracks={favorites} />
       </Styles>
     </Col>
   ) : (
-    <Col className="queue d-flex justify-content-center align-items-center text-white">
+    <Col
+      xs={12}
+      sm={11}
+      md={10}
+      className="queue d-flex justify-content-center align-items-center text-white ml-auto"
+    >
       <div className="text-center">
         <h1>Favorites are empty</h1>
         <p>Go add some songs already</p>
