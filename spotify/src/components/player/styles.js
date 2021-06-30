@@ -22,6 +22,7 @@ const slideInBottom = keyframes`
     -webkit-transform: translateY(0);
     transform: translateY(0);
     opacity: 1;
+    z-index: 1050;
   }
 `
 const wSlideOutBottom = keyframes`
@@ -54,8 +55,9 @@ const slideOutBottom = keyframes`
     width: 100vw;
     height: 100vh;
     opacity: 0;
-    z-index: 1050;
+    z-index: -1050;
     background-image: linear-gradient(rgba(176, 0, 56, 1), rgb(0, 0, 0) 85%);
+    transform: translateY(100%);
 
     &.slide-out-bottom {
     -webkit-animation: ${wSlideOutBottom} 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53)

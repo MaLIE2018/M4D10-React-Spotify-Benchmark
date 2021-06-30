@@ -34,6 +34,7 @@ const { ModalLayer, Image, NowPlayerView, PlayerHeader, ProgressBar } = Styles;
 
 const Player = () => {
   const [artistImg, setArtistImg] = useState("");
+
   const dispatch = useDispatch();
   const showPlayer = useSelector((state) => state.showPlayer);
   const isMobile = useMediaQuery({ maxWidth: 360 });

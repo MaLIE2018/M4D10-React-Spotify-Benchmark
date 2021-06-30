@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 
 import { BiPlay, BiHeart, BiPause } from "react-icons/bi";
 import { BsHeartFill } from "react-icons/bs";
-import { NowPlayer, Title, Artist, ProgressBar } from "./styles";
+
 import { theme } from "../../index";
+import { NowPlayer, Title, Artist, ProgressBar } from "./styles";
+
 import { useDispatch, useSelector } from "react-redux";
 import { useMediaQuery } from "react-responsive";
 
